@@ -1,44 +1,515 @@
-￼
-#أثر_خبرة
-قسم الرصد والتفاعل
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>#أثر_خبرة — قسم الرصد والتفاعل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#1C1B1C;         /* أسود دافئ من هوية تاكت الجديدة */
+    --panel:#292829;      /* الرمادي المعتمد */
+    --panel-2:#3B3B3A;
+    --line:#424242;
+    --text:#FFFFFF;
+    --muted:#B5B5B5;
+    --pulse:#F05D2A;      /* البرتقالي الجديد #F05D2A */
+    --accent:#4AC0AE;     /* الأخضر المائي — لون تاكت الثانوي */
+    --warn:#F5B14C;       /* أصفر — محايد */
+    --neg:#D64545;        /* أحمر — سلبي */
+    --sky:#6CBEAE;        /* درجة أفتح من الأخضر المائي — منصات */
+    --radius:20px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"Readex Pro","DIN Next LT Arabic",-apple-system,"Segoe UI",Tahoma,sans-serif;
+    overflow:hidden;
+    display:flex;flex-direction:column;
+  }
 
-بث مباشر — آخر تحديث
-قبل دقيقتين
-⛶ ملء الشاشة
---:--
+  /* ===== الرأس ===== */
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:22px 40px 14px;
+    flex-shrink:0;
+  }
+  .brand{display:flex;align-items:center;gap:16px}
+  .brand-mark{
+    height:56px;border-radius:14px;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    padding:9px 16px;
+  }
+  .brand-mark img{height:100%;width:auto;display:block}
+  .brand h1{font-size:24px;font-weight:700;letter-spacing:.2px}
+  .brand small{display:block;color:var(--muted);font-weight:400;font-size:13px;margin-top:2px}
+  .clockbox{text-align:left}
+  #clock{font-size:34px;font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:1px}
+  #dateline{color:var(--muted);font-size:14px;margin-top:2px}
+  .live{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:999px;padding:8px 18px;font-size:14px;color:var(--muted);
+  }
+  .live-dot{width:9px;height:9px;border-radius:50%;background:var(--pulse);animation:blink 2s infinite}
+  #fsBtn{
+    display:inline-flex;align-items:center;gap:8px;
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:999px;padding:8px 18px;font-size:14px;color:var(--muted);
+    cursor:pointer;font-family:inherit;transition:color .2s,border-color .2s;
+  }
+  #fsBtn:hover{color:var(--text);border-color:var(--pulse)}
+  body.is-fullscreen #fsBtn{opacity:0;pointer-events:none;transition:opacity .4s}
+  body.is-fullscreen:hover #fsBtn{opacity:.6;pointer-events:auto}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 
-الإشارات اليوم
-1,284
-▲ 18٪ عن أمس الوصول التقديري
-4.6M
-▲ 7٪ هذا الأسبوع التفاعل
-96K
-▼ 3٪ عن أمس المشاهدات
-1.2M
-▲ آخر ٢٤ ساعة نبض العلامة — الإشارات لكل ساعة
-64 إشارة / الساعة الحالية
+  /* ===== المشاهد ===== */
+  .stage{flex:1;position:relative;padding:6px 40px 12px;min-height:0}
+  .scene{
+    position:absolute;inset:6px 40px 12px;
+    display:grid;gap:18px;
+    opacity:0;transform:translateY(14px);
+    transition:opacity .7s ease,transform .7s ease;
+    pointer-events:none;
+  }
+  .scene.active{opacity:1;transform:none;pointer-events:auto}
 
-المشاعر بالأرقام
+  .card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px 22px;
+    display:flex;flex-direction:column;
+    min-height:0;
+  }
+  .card .label{color:var(--muted);font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+  .kpi{font-size:44px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums;margin-top:8px}
+  .delta{font-size:15px;margin-top:4px;display:flex;align-items:center;gap:6px}
+  .up{color:var(--pulse)} .down{color:var(--neg)}
 
-إيجابي
-—
+  /* المشهد ١ */
+  #scene1{grid-template-columns:repeat(4,1fr);grid-template-rows:auto 1.15fr 1fr}
+  .pulse-card{grid-column:1 / 3;grid-row:2;position:relative;overflow:hidden}
+  .pulse-card svg{position:absolute;inset:0;width:100%;height:100%}
+  .pulse-head{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start}
+  .pulse-now{font-size:40px;font-weight:700;color:var(--pulse)}
+  .pulse-now small{font-size:15px;color:var(--muted);font-weight:400;margin-inline-start:8px}
 
-محايد
-—
+  .sentiment-card{grid-column:4;grid-row:2;align-items:center;justify-content:center;gap:8px}
+  .gauge{position:relative;width:min(165px,68%);aspect-ratio:1}
+  .gauge svg{width:100%;height:100%;transform:rotate(-90deg)}
+  .gauge circle{fill:none;stroke-width:14;stroke-linecap:round}
+  .gauge .track{stroke:var(--line)}
+  .gauge .val{stroke:var(--accent);transition:stroke-dashoffset 1.2s ease}
+  .gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .gauge-center b{font-size:34px;font-weight:700}
+  .gauge-center span{color:var(--muted);font-size:14px}
+  .senti-legend{display:flex;gap:14px;margin-top:6px;flex-wrap:wrap;justify-content:center}
+  .senti-legend div{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
+  .dot{width:10px;height:10px;border-radius:50%}
 
-سلبي
-—
-المزاج العام للمحادثة
-78٪
-إيجابي + محايد
+  .senti-counts{grid-column:3;grid-row:2;justify-content:center;gap:12px}
+  .sc-row{display:flex;align-items:center;justify-content:space-between}
+  .sc-row .sc-label{display:flex;align-items:center;gap:10px;font-size:16px;color:var(--muted)}
+  .sc-row b{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums}
+  .sc-pos b{color:var(--accent)} .sc-neg b{color:var(--neg)} .sc-neu b{color:var(--warn)}
 
-إيجابي 46٪
+  .feed-card{grid-column:1 / 3;grid-row:3;overflow:hidden}
+  .toppost-a{grid-column:3;grid-row:3}
+  .keywords-card{grid-column:4;grid-row:3;overflow:hidden}
+  .kw-cloud{
+    margin-top:14px;flex:1;
+    display:flex;flex-wrap:wrap;align-items:flex-start;align-content:flex-start;
+    gap:8px 10px;overflow:hidden;
+  }
+  .kw-chip{
+    display:inline-flex;align-items:center;
+    padding:6px 14px;border-radius:999px;
+    background:var(--panel-2);border:1px solid var(--line);
+    font-weight:600;line-height:1.2;
+    animation:kwIn .5s ease both;
+  }
+  .kw-chip.kw-1{font-size:22px;color:var(--pulse);border-color:var(--pulse)}
+  .kw-chip.kw-2{font-size:19px;color:var(--accent);border-color:rgba(74,192,174,.5)}
+  .kw-chip.kw-3{font-size:17px;color:var(--text)}
+  .kw-chip.kw-4{font-size:15px;color:var(--text)}
+  .kw-chip.kw-5{font-size:14px;color:var(--muted)}
+  @keyframes kwIn{from{opacity:0;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+  .feed-list{margin-top:12px;display:flex;flex-direction:column;flex:1;overflow:hidden}
+  .feed-item{
+    padding:10px 0;border-bottom:1px solid var(--line);
+    display:flex;flex-direction:column;gap:4px;
+    animation:feedIn .8s ease;
+  }
+  .feed-item:last-child{border-bottom:none}
+  .feed-item .fi-text{font-size:14px;line-height:1.55;color:var(--text)}
+  .feed-item .fi-meta{font-size:12px;color:var(--muted);display:flex;gap:12px;align-items:center}
+  .feed-item .fi-source{color:var(--accent);font-weight:600}
+  @keyframes feedIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+  .platform-row{display:flex;align-items:center;gap:14px;margin-top:13px}
+  .platform-row .pname{width:110px;font-size:16px;font-weight:500}
+  .bar{flex:1;height:16px;background:var(--panel-2);border-radius:999px;overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:999px;width:0;transition:width 1.2s ease}
+  .platform-row .pval{width:80px;text-align:left;font-variant-numeric:tabular-nums;color:var(--muted);font-size:15px}
+  .toppost .post-body{font-size:16px;line-height:1.7;margin-top:10px;flex:1;overflow:hidden}
+  .post-meta{display:flex;gap:18px;color:var(--muted);font-size:13px;margin-top:8px;flex-wrap:wrap}
+  .post-meta b{color:var(--text)}
+  .src-chip{background:var(--panel-2);border:1px solid var(--line);border-radius:999px;padding:4px 14px;font-size:13px;color:var(--sky)}to{transform:translateX(50%)}}
 
-محايد 32٪
+  .scene-dots{position:absolute;bottom:70px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:5}
+  .scene-dots span{width:26px;height:5px;border-radius:999px;background:var(--line);transition:background .4s}
+  .scene-dots span.on{background:var(--pulse)}
 
-سلبي 22٪
+  to{transform:translateX(50%)}}
 
-آخر الإشارات أعلى منشور تفاعلاً
-Meltwater
-— بانتظار البيانات —
-🔥 الكلمات الرائجة
+  @media (prefers-reduced-motion:reduce){
+    .ticker{animation:none}
+    .live-dot{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <div class="brand-mark"><img src="data:image/png;base64,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" alt="tact"></div>
+    <div>
+      <h1>#أثر_خبرة</h1>
+      <small>قسم الرصد والتفاعل</small>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <div class="live"><span class="live-dot"></span> بث مباشر — آخر تحديث <span id="lastupd">قبل دقيقتين</span></div>
+    <button id="fsBtn" title="ملء الشاشة">⛶ ملء الشاشة</button>
+  </div>
+  <div class="clockbox">
+    <div id="clock">--:--</div>
+    <div id="dateline"></div>
+  </div>
+</header>
+
+<div class="stage">
+
+  <!-- المشهد الأول: النظرة العامة -->
+  <section class="scene active" id="scene1">
+    <div class="card">
+      <div class="label">الإشارات اليوم</div>
+      <div class="kpi" id="kMentions">1,284</div>
+      <div class="delta up">▲ 18٪ عن أمس</div>
+    </div>
+    <div class="card">
+      <div class="label">الوصول التقديري</div>
+      <div class="kpi" id="kReach">4.6M</div>
+      <div class="delta up">▲ 7٪ هذا الأسبوع</div>
+    </div>
+    <div class="card">
+      <div class="label">التفاعل</div>
+      <div class="kpi" id="kEng">96K</div>
+      <div class="delta down">▼ 3٪ عن أمس</div>
+    </div>
+    <div class="card">
+      <div class="label">المشاهدات</div>
+      <div class="kpi" id="kViews">1.2M</div>
+      <div class="delta up">▲ آخر ٢٤ ساعة</div>
+    </div>
+
+    <div class="card pulse-card">
+      <div class="pulse-head">
+        <div class="label">نبض العلامة — الإشارات لكل ساعة</div>
+        <div class="pulse-now" id="pulseNow">64 <small>إشارة / الساعة الحالية</small></div>
+      </div>
+      <svg id="pulseSvg" viewBox="0 0 1000 260" preserveAspectRatio="none"></svg>
+    </div>
+
+    <div class="card senti-counts">
+      <div class="label">المشاعر بالأرقام</div>
+      <div class="sc-row sc-pos"><span class="sc-label"><span class="dot" style="background:var(--accent)"></span> إيجابي</span><b id="scPos">—</b></div>
+      <div class="sc-row sc-neu"><span class="sc-label"><span class="dot" style="background:var(--warn)"></span> محايد</span><b id="scNeu">—</b></div>
+      <div class="sc-row sc-neg"><span class="sc-label"><span class="dot" style="background:var(--neg)"></span> سلبي</span><b id="scNeg">—</b></div>
+    </div>
+
+    <div class="card sentiment-card">
+      <div class="label" style="align-self:flex-start">المزاج العام للمحادثة</div>
+      <div class="gauge">
+        <svg viewBox="0 0 120 120">
+          <circle class="track" cx="60" cy="60" r="50"/>
+          <circle class="val" id="gaugeVal" cx="60" cy="60" r="50"/>
+        </svg>
+        <div class="gauge-center"><b id="gaugeNum">78٪</b><span>إيجابي + محايد</span></div>
+      </div>
+      <div class="senti-legend">
+        <div><span class="dot" style="background:var(--accent)"></span> إيجابي 46٪</div>
+        <div><span class="dot" style="background:var(--warn)"></span> محايد 32٪</div>
+        <div><span class="dot" style="background:var(--neg)"></span> سلبي 22٪</div>
+      </div>
+    </div>
+
+<div class="card feed-card">
+      <div class="label"><span class="live-dot"></span> آخر الإشارات</div>
+      <div class="feed-list" id="feedList"></div>
+    </div>
+
+<div class="card toppost toppost-a">
+      <div class="label">أعلى منشور تفاعلاً <span class="src-chip" id="topPostSrc">Meltwater</span></div>
+      <div class="post-body" id="topPostBody">— بانتظار البيانات —</div>
+      <div class="post-meta" id="topPostMeta"></div>
+    </div>
+
+<div class="card keywords-card">
+      <div class="label">🔥 الكلمات الرائجة</div>
+      <div class="kw-cloud" id="kwCloud"></div>
+    </div>
+</section>
+
+
+</div>
+
+<script>
+/* ============ بيانات تجريبية — لاحقاً تجي من n8n ============ */
+const DATA = {
+  platforms: [
+    {name:"إكس (تويتر)", val:512, color:"var(--sky)"},
+    {name:"إنستغرام",    val:318, color:"var(--pulse)"},
+    {name:"أخبار وصحف",  val:214, color:"var(--warn)"},
+    {name:"لينكدإن",     val:142, color:"#B48CF2"},
+    {name:"تيك توك",     val:98,  color:"var(--neg)"},
+  ],
+  tickerItems: [
+    "<b>@عميل_سعيد:</b> أسرع خدمة توصيل جربتها 👌",
+    "<b>صحيفة الاقتصاد:</b> الشركة ضمن أفضل ١٠ بيئات عمل",
+    "<b>@مهتم_بالتقنية:</b> التطبيق الجديد سلس جداً",
+    "<b>Emplifi:</b> ارتفاع معدل التفاعل على إنستغرام ١٢٪ هذا الأسبوع",
+    "<b>@متابع:</b> متى تفتحون فرع في الدمام؟",
+    "<b>Meltwater:</b> ٣ تغطيات صحفية جديدة خلال الساعة الماضية",
+  ],
+  sentimentOk: 78,       // إيجابي + محايد
+  pulseSeries: [22,31,28,40,36,52,47,61,55,70,64,58,66,73,60,68,64]
+};
+
+/* ============ البيانات الحية من n8n ============ */
+const FEED_URL = "https://a249a.app.n8n.cloud/webhook/tact-dashboard";
+
+function renderKeywords(list){
+  const wrap = document.getElementById("kwCloud");
+  if(!wrap) return;
+  wrap.innerHTML = "";
+  list.slice(0, 14).forEach((kw,i)=>{
+    const size = i < 2 ? 1 : i < 4 ? 2 : i < 7 ? 3 : i < 11 ? 4 : 5;
+    const chip = document.createElement("span");
+    chip.className = "kw-chip kw-" + size;
+    chip.style.animationDelay = (i * 60) + "ms";
+    let text = String(kw);
+    // نضيف # للـ hashtags اللي جاية بدونه إذا كانت من named_entities
+    if (!text.startsWith("#") && !text.startsWith("@") && text.includes("_")) {
+      text = "#" + text;
+    }
+    chip.textContent = text;
+    wrap.appendChild(chip);
+  });
+}
+
+function fmtBig(n){
+  n = Number(n)||0;
+  if(n >= 1e6) return (n/1e6).toFixed(1)+"M";
+  if(n >= 1e3) return Math.round(n/1e3)+"K";
+  return n.toLocaleString("en-US");
+}
+
+function renderFeed(){
+  const list = document.getElementById("feedList");
+  if(!list || !window._feedItems || !window._feedItems.length) return;
+  const items = window._feedItems.slice(0, 5);
+  list.innerHTML = items.map((raw,i)=>{
+    const clean = String(raw).replace(/^[📰👋📷🎬👥💬]\s*/, "");
+    let src = "منشور";
+    if (String(raw).startsWith("📰")) src = "خبر صحفي";
+    else if (String(raw).startsWith("👋")) src = "لينكدإن";
+    else if (String(raw).startsWith("📷")) src = "إنستغرام";
+    else if (String(raw).startsWith("🎬")) src = "تيك توك";
+    else if (String(raw).startsWith("👥")) src = "فيسبوك";
+    else if (String(raw).startsWith("💬")) src = "إكس";
+    const mins = i * 6 + Math.floor(Math.random()*3) + 1;
+    return `<div class="feed-item">
+      <div class="fi-text">${clean}</div>
+      <div class="fi-meta"><span class="fi-source">${src}</span><span>قبل ${mins} دقيقة</span></div>
+    </div>`;
+  }).join("");
+}
+function rotateFeed(){
+  if(!window._feedItems || window._feedItems.length <= 5) return;
+  window._feedItems.push(window._feedItems.shift());
+  renderFeed();
+}
+setInterval(rotateFeed, 12000);
+
+async function fetchLiveData(){
+  try{
+    const r = await fetch(FEED_URL, {cache:"no-store"});
+    if(!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    applyLiveData(d);
+    document.getElementById("lastupd").textContent =
+      d.cache_updated_at ? new Date(d.cache_updated_at).toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"}) : "الآن";
+  }catch(e){
+    console.warn("live feed unavailable, keeping current data", e);
+  }
+}
+
+function applyLiveData(d){
+  if(!d || d.status === "empty" || d.status === "seed") return;
+  if(typeof d.mentions_today === "number" && d.mentions_today > 0)
+    document.getElementById("kMentions").textContent = d.mentions_today.toLocaleString("en-US");
+  if(d.reach) document.getElementById("kReach").textContent = fmtBig(d.reach);
+  if(d.engagement) document.getElementById("kEng").textContent = fmtBig(d.engagement);
+  if(d.views) document.getElementById("kViews").textContent = fmtBig(d.views);
+  if(d.sentiment_counts){
+    document.getElementById("scPos").textContent = (d.sentiment_counts.positive||0).toLocaleString("en-US");
+    document.getElementById("scNeu").textContent = (d.sentiment_counts.neutral||0).toLocaleString("en-US");
+    document.getElementById("scNeg").textContent = (d.sentiment_counts.negative||0).toLocaleString("en-US");
+  }
+  if(d.sentiment && typeof d.sentiment.positive === "number"){
+    const ok = Math.min(100, (d.sentiment.positive||0) + (d.sentiment.neutral||0));
+    const c = document.getElementById("gaugeVal");
+    const L = 2*Math.PI*50;
+    c.style.strokeDashoffset = L*(1-ok/100);
+    document.getElementById("gaugeNum").textContent = ok + "٪";
+    document.querySelector(".senti-legend").innerHTML =
+      `<div><span class="dot" style="background:var(--accent)"></span> إيجابي ${d.sentiment.positive}٪</div>
+       <div><span class="dot" style="background:var(--warn)"></span> محايد ${d.sentiment.neutral}٪</div>
+       <div><span class="dot" style="background:var(--neg)"></span> سلبي ${d.sentiment.negative}٪</div>`;
+  }
+  if(Array.isArray(d.top_keywords) && d.top_keywords.length) renderKeywords(d.top_keywords);
+  if(Array.isArray(d.top_posts) && d.top_posts.length){
+    const p = d.top_posts[0];
+    document.getElementById("topPostBody").textContent = '"' + p.text + '"';
+    document.getElementById("topPostSrc").textContent = p.source || "سوشال ميديا";
+    document.getElementById("topPostMeta").innerHTML =
+      `<span>تفاعل <b>${(p.engagement||0).toLocaleString("en-US")}</b></span><span>وصول <b>${fmtBig(p.reach||0)}</b></span>`;
+  }
+  if(Array.isArray(d.top_news) && d.top_news.length){
+    const n = d.top_news[0];
+    document.getElementById("topNewsBody").textContent = '"' + n.title + '"';
+    document.getElementById("topNewsSrc").textContent = n.source || "صحيفة";
+    document.getElementById("topNewsMeta").innerHTML =
+      `<span>وصول تقديري <b>${fmtBig(n.reach||0)}</b></span>`;
+  }
+  if(Array.isArray(d.ticker) && d.ticker.length){
+    window._feedItems = d.ticker.slice();
+    renderFeed();
+  }
+  if(Array.isArray(d.top_posts) && d.top_posts.length){
+    const p = d.top_posts[0];
+    document.getElementById("topPostBody").textContent = '"' + p.text + '"';
+    document.getElementById("topPostSrc").textContent = p.source || "سوشال ميديا";
+    document.getElementById("topPostMeta").innerHTML =
+      `<span>تفاعل <b>${(p.engagement||0).toLocaleString("en-US")}</b></span><span>وصول <b>${fmtBig(p.reach||0)}</b></span>`;
+  }
+}
+
+fetchLiveData();
+setInterval(fetchLiveData, 5*60*1000); // كل ٥ دقايق
+
+/* ملء الشاشة */
+(function(){
+  const btn = document.getElementById("fsBtn");
+  function goFull(){
+    const el = document.documentElement;
+    (el.requestFullscreen || el.webkitRequestFullscreen || function(){}).call(el);
+  }
+  function exitFull(){
+    (document.exitFullscreen || document.webkitExitFullscreen || function(){}).call(document);
+  }
+  btn.addEventListener("click", ()=>{
+    if(document.fullscreenElement || document.webkitFullscreenElement) exitFull();
+    else goFull();
+  });
+  function syncState(){
+    const on = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    document.body.classList.toggle("is-fullscreen", on);
+    btn.textContent = on ? "⛶ خروج" : "⛶ ملء الشاشة";
+  }
+  document.addEventListener("fullscreenchange", syncState);
+  document.addEventListener("webkitfullscreenchange", syncState);
+})();
+
+/* الساعة والتاريخ */
+function tick(){
+  const n = new Date();
+  document.getElementById("clock").textContent =
+    n.toLocaleTimeString("ar-SA",{hour:"2-digit",minute:"2-digit"});
+  document.getElementById("dateline").textContent =
+    n.toLocaleDateString("ar-SA",{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+}
+tick(); setInterval(tick, 10000);
+
+/* مؤشر المزاج */
+(function(){
+  const c = document.getElementById("gaugeVal");
+  const L = 2*Math.PI*50;
+  c.style.strokeDasharray = L;
+  c.style.strokeDashoffset = L;
+  requestAnimationFrame(()=>{ c.style.strokeDashoffset = L*(1-DATA.sentimentOk/100); });
+  document.getElementById("gaugeNum").textContent = DATA.sentimentOk + "٪";
+})();
+
+/* نبض العلامة (SVG) */
+function drawPulse(series){
+  const svg = document.getElementById("pulseSvg");
+  const W=1000, H=260, pad=30;
+  const max = Math.max(...series)*1.2;
+  const step = (W-pad*2)/(series.length-1);
+  const pts = series.map((v,i)=>[pad+i*step, H-pad-(v/max)*(H-pad*2)]);
+  const line = pts.map((p,i)=>(i?"L":"M")+p[0]+","+p[1]).join(" ");
+  const area = line + ` L${pts[pts.length-1][0]},${H} L${pts[0][0]},${H} Z`;
+  const last = pts[pts.length-1];
+  svg.innerHTML = `
+    <defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F05D2A" stop-opacity=".30"/>
+      <stop offset="1" stop-color="#F05D2A" stop-opacity="0"/>
+    </linearGradient></defs>
+    <path d="${area}" fill="url(#pg)"/>
+    <path d="${line}" fill="none" stroke="#F05D2A" stroke-width="3.5" stroke-linejoin="round"/>
+    <circle cx="${last[0]}" cy="${last[1]}" r="7" fill="#F05D2A">
+      <animate attributeName="r" values="6;9;6" dur="1.6s" repeatCount="indefinite"/>
+    </circle>`;
+}
+drawPulse(DATA.pulseSeries);
+
+/* محاكاة "حياة" الشاشة: تحديث خفيف كل ٨ ثواني */
+setInterval(()=>{
+  const s = DATA.pulseSeries;
+  s.push(Math.max(15, Math.min(90, s[s.length-1] + Math.round((Math.random()-.45)*14))));
+  s.shift();
+  drawPulse(s);
+  document.getElementById("pulseNow").innerHTML =
+    s[s.length-1] + ' <small>إشارة / الساعة الحالية</small>';
+  const m = document.getElementById("kMentions");
+  m.textContent = (parseInt(m.textContent.replace(/,/g,"")) + Math.floor(Math.random()*3))
+                  .toLocaleString("en-US");
+}, 8000);
+
+/* صفوف المنصات */
+(function(){
+  const wrap = document.getElementById("platformRows");
+  const max = Math.max(...DATA.platforms.map(p=>p.val));
+  DATA.platforms.forEach(p=>{
+    const row = document.createElement("div");
+    row.className = "platform-row";
+    row.innerHTML = `<div class="pname">${p.name}</div>
+      <div class="bar"><i style="background:${p.color}"></i></div>
+      <div class="pval">${p.val.toLocaleString("en-US")} إشارة</div>`;
+    wrap.appendChild(row);
+    requestAnimationFrame(()=> row.querySelector("i").style.width = (p.val/max*100)+"%");
+  });
+})();
+
+
+
+/* شاشة واحدة ثابتة — لا تبديل مشاهد */
+</script>
+</body>
+</html>
