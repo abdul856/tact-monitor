@@ -48,8 +48,8 @@
   .brand h1{font-size:24px;font-weight:700;letter-spacing:.2px}
   .brand small{display:block;color:var(--muted);font-weight:400;font-size:13px;margin-top:2px}
   .clockbox{text-align:left}
-  #clock{font-size:34px;font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:1px}
-  #dateline{color:var(--muted);font-size:14px;margin-top:2px}
+  #clock{font-size:30px;font-weight:300;font-variant-numeric:tabular-nums;letter-spacing:1px;line-height:1.2}
+  #dateline{color:var(--muted);font-size:13px;margin-top:4px;line-height:1.4}
   .live{
     display:inline-flex;align-items:center;gap:8px;
     background:var(--panel);border:1px solid var(--line);
@@ -93,7 +93,38 @@
 
   /* المشهد ١ */
   #scene1{grid-template-columns:repeat(4,1fr);grid-template-rows:auto 1.15fr 1fr}
-  .pulse-card{grid-column:1 / 3;grid-row:2;position:relative;overflow:hidden}
+  .cities-card{grid-column:1;grid-row:2;overflow:hidden;display:flex;flex-direction:column}
+  .cities-list{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+  .city-row{
+    display:flex;align-items:center;gap:10px;
+    animation:kwIn .5s ease both;
+  }
+  .city-name{font-size:14px;color:var(--text);font-weight:600;min-width:70px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .city-bar{flex:1;height:9px;background:var(--panel-2);border-radius:999px;overflow:hidden}
+  .city-bar i{display:block;height:100%;border-radius:999px;width:0;transition:width 1s ease}
+  .city-count{font-size:13px;color:var(--muted);font-weight:600;font-variant-numeric:tabular-nums;min-width:25px;text-align:end}
+  .eng-mini{margin-top:auto;padding-top:14px;border-top:1px solid var(--line)}
+  .eng-mini-label{font-size:12px;color:var(--muted);margin-bottom:6px;font-weight:600}
+  .eng-mini svg{width:100%;height:70px;display:block}
+  .hashtags-card{grid-column:2;grid-row:2;overflow:hidden}
+  .hashtags-list{margin-top:14px;flex:1;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+  .ht-row{
+    display:flex;align-items:center;gap:12px;
+    animation:kwIn .5s ease both;
+  }
+  .ht-name{
+    font-size:14px;color:var(--text);font-weight:600;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    max-width:60%;
+  }
+  .ht-bar{
+    flex:1;height:10px;background:var(--panel-2);border-radius:999px;overflow:hidden;
+  }
+  .ht-bar i{display:block;height:100%;border-radius:999px;width:0;transition:width 1s ease}
+  .ht-count{
+    font-size:14px;color:var(--muted);font-weight:600;
+    font-variant-numeric:tabular-nums;min-width:30px;text-align:end;
+  }
   .pulse-card svg{position:absolute;inset:0;width:100%;height:100%}
   .pulse-head{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-start}
   .pulse-now{font-size:40px;font-weight:700;color:var(--pulse)}
@@ -112,11 +143,25 @@
   .senti-legend div{display:flex;align-items:center;gap:8px;font-size:14px;color:var(--muted)}
   .dot{width:10px;height:10px;border-radius:50%}
 
-  .senti-counts{grid-column:3;grid-row:2;justify-content:center;gap:12px}
-  .sc-row{display:flex;align-items:center;justify-content:space-between}
-  .sc-row .sc-label{display:flex;align-items:center;gap:10px;font-size:16px;color:var(--muted)}
-  .sc-row b{font-size:30px;font-weight:700;font-variant-numeric:tabular-nums}
-  .sc-pos b{color:var(--accent)} .sc-neg b{color:var(--neg)} .sc-neu b{color:var(--warn)}
+  .reposts-card{grid-column:3;grid-row:2;overflow:hidden}
+  .reposts-list{margin-top:10px;flex:1;display:flex;flex-direction:column;overflow:hidden}
+  .rp-item{
+    padding:8px 0;border-bottom:1px solid var(--line);
+    display:flex;flex-direction:column;gap:3px;
+    animation:kwIn .5s ease both;
+  }
+  .rp-item:last-child{border-bottom:none}
+  .rp-head{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+  .rp-author{color:var(--accent);font-weight:700}
+  .rp-badge{
+    background:var(--pulse);color:#fff;
+    padding:1px 8px;border-radius:999px;
+    font-size:11px;font-weight:700;font-variant-numeric:tabular-nums;
+    margin-inline-start:auto;
+  }
+  .rp-text{font-size:13px;line-height:1.5;color:var(--text);
+    display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .rp-empty{color:var(--muted);font-size:14px;padding-top:20px;text-align:center}
 
   .feed-card{grid-column:1 / 3;grid-row:3;overflow:hidden}
   .toppost-a{grid-column:3;grid-row:3}
@@ -217,19 +262,25 @@
       <div class="delta up">▲ آخر ٢٤ ساعة</div>
     </div>
 
-    <div class="card pulse-card">
-      <div class="pulse-head">
-        <div class="label">نبض العلامة — الإشارات لكل ساعة</div>
-        <div class="pulse-now" id="pulseNow">64 <small>إشارة / الساعة الحالية</small></div>
+    <div class="card cities-card">
+      <div class="label">📍 أعلى المدن تفاعلاً</div>
+      <div class="cities-list" id="citiesList"></div>
+      <div class="eng-mini">
+        <div class="eng-mini-label">📈 عدد الإشارات اليومية — آخر ٣٠ يوم</div>
+        <svg id="engSvg" viewBox="0 0 600 100" preserveAspectRatio="none"></svg>
       </div>
-      <svg id="pulseSvg" viewBox="0 0 1000 260" preserveAspectRatio="none"></svg>
     </div>
 
-    <div class="card senti-counts">
-      <div class="label">المشاعر بالأرقام</div>
-      <div class="sc-row sc-pos"><span class="sc-label"><span class="dot" style="background:var(--accent)"></span> إيجابي</span><b id="scPos">—</b></div>
-      <div class="sc-row sc-neu"><span class="sc-label"><span class="dot" style="background:var(--warn)"></span> محايد</span><b id="scNeu">—</b></div>
-      <div class="sc-row sc-neg"><span class="sc-label"><span class="dot" style="background:var(--neg)"></span> سلبي</span><b id="scNeg">—</b></div>
+    <div class="card hashtags-card">
+      <div class="label"># أبرز الهاشتاقات</div>
+      <div class="hashtags-list" id="hashtagsList"></div>
+    </div>
+
+    <div class="card reposts-card">
+      <div class="label">💬 أبرز تفاعلات الجمهور <span class="src-chip">Meltwater</span></div>
+      <div class="reposts-list" id="repostsList">
+        <div class="rp-empty">— بانتظار البيانات —</div>
+      </div>
     </div>
 
     <div class="card sentiment-card">
@@ -239,7 +290,7 @@
           <circle class="track" cx="60" cy="60" r="50"/>
           <circle class="val" id="gaugeVal" cx="60" cy="60" r="50"/>
         </svg>
-        <div class="gauge-center"><b id="gaugeNum">78٪</b><span>إيجابي + محايد</span></div>
+        <div class="gauge-center"><b id="gaugeNum">60٪</b><span>إيجابي</span></div>
       </div>
       <div class="senti-legend">
         <div><span class="dot" style="background:var(--accent)"></span> إيجابي 46٪</div>
@@ -286,8 +337,7 @@ const DATA = {
     "<b>@متابع:</b> متى تفتحون فرع في الدمام؟",
     "<b>Meltwater:</b> ٣ تغطيات صحفية جديدة خلال الساعة الماضية",
   ],
-  sentimentOk: 78,       // إيجابي + محايد
-  pulseSeries: [22,31,28,40,36,52,47,61,55,70,64,58,66,73,60,68,64]
+  sentimentOk: 60       // إيجابي فقط
 };
 
 /* ============ البيانات الحية من n8n ============ */
@@ -309,6 +359,33 @@ function renderKeywords(list){
     }
     chip.textContent = text;
     wrap.appendChild(chip);
+  });
+}
+
+function renderHashtags(list){
+  const wrap = document.getElementById("hashtagsList");
+  if(!wrap) return;
+  wrap.innerHTML = "";
+  if(!list.length){
+    wrap.innerHTML = '<div style="color:var(--muted);font-size:14px;text-align:center;padding-top:20px">— لا توجد هاشتاقات —</div>';
+    return;
+  }
+  const max = Math.max(...list.map(h => h.count || 1));
+  const colors = ["var(--pulse)", "var(--accent)", "var(--pulse)", "var(--accent)", "var(--muted)", "var(--muted)"];
+  list.slice(0, 5).forEach((h, i) => {
+    const row = document.createElement("div");
+    row.className = "ht-row";
+    row.style.animationDelay = (i * 80) + "ms";
+    const tag = String(h.tag || "").replace(/^#/, "#");
+    row.innerHTML = `
+      <div class="ht-name" title="${tag}">${tag}</div>
+      <div class="ht-bar"><i style="background:${colors[i % colors.length]}"></i></div>
+      <div class="ht-count">${h.count}</div>
+    `;
+    wrap.appendChild(row);
+    requestAnimationFrame(() => {
+      row.querySelector("i").style.width = ((h.count / max) * 100) + "%";
+    });
   });
 }
 
@@ -366,23 +443,33 @@ function applyLiveData(d){
   if(d.reach) document.getElementById("kReach").textContent = fmtBig(d.reach);
   if(d.engagement) document.getElementById("kEng").textContent = fmtBig(d.engagement);
   if(d.views) document.getElementById("kViews").textContent = fmtBig(d.views);
-  if(d.sentiment_counts){
-    document.getElementById("scPos").textContent = (d.sentiment_counts.positive||0).toLocaleString("en-US");
-    document.getElementById("scNeu").textContent = (d.sentiment_counts.neutral||0).toLocaleString("en-US");
-    document.getElementById("scNeg").textContent = (d.sentiment_counts.negative||0).toLocaleString("en-US");
+  if(Array.isArray(d.top_posts) && d.top_posts.length){
+    const list = document.getElementById("repostsList");
+    list.innerHTML = d.top_posts.slice(0, 3).map(p => {
+      return `<div class="rp-item">
+        <div class="rp-head">
+          <span class="rp-author">${p.source || "منشور"}</span>
+          <span class="rp-badge">${(p.engagement||0).toLocaleString("en-US")} تفاعل</span>
+        </div>
+        <div class="rp-text">${p.text}</div>
+      </div>`;
+    }).join("");
   }
   if(d.sentiment && typeof d.sentiment.positive === "number"){
-    const ok = Math.min(100, (d.sentiment.positive||0) + (d.sentiment.neutral||0));
+    const positive = d.sentiment.positive || 0;
     const c = document.getElementById("gaugeVal");
     const L = 2*Math.PI*50;
-    c.style.strokeDashoffset = L*(1-ok/100);
-    document.getElementById("gaugeNum").textContent = ok + "٪";
+    c.style.strokeDashoffset = L*(1-positive/100);
+    document.getElementById("gaugeNum").textContent = positive + "٪";
     document.querySelector(".senti-legend").innerHTML =
       `<div><span class="dot" style="background:var(--accent)"></span> إيجابي ${d.sentiment.positive}٪</div>
        <div><span class="dot" style="background:var(--warn)"></span> محايد ${d.sentiment.neutral}٪</div>
        <div><span class="dot" style="background:var(--neg)"></span> سلبي ${d.sentiment.negative}٪</div>`;
   }
   if(Array.isArray(d.top_keywords) && d.top_keywords.length) renderKeywords(d.top_keywords);
+  if(Array.isArray(d.top_hashtags) && d.top_hashtags.length) renderHashtags(d.top_hashtags);
+  if(Array.isArray(d.top_cities) && d.top_cities.length) renderCities(d.top_cities);
+  if(Array.isArray(d.engagement_series) && d.engagement_series.length) drawEngagementTrend(d.engagement_series);
   if(Array.isArray(d.top_posts) && d.top_posts.length){
     const p = d.top_posts[0];
     document.getElementById("topPostBody").textContent = '"' + p.text + '"';
@@ -456,41 +543,53 @@ tick(); setInterval(tick, 10000);
   document.getElementById("gaugeNum").textContent = DATA.sentimentOk + "٪";
 })();
 
-/* نبض العلامة (SVG) */
-function drawPulse(series){
-  const svg = document.getElementById("pulseSvg");
-  const W=1000, H=260, pad=30;
-  const max = Math.max(...series)*1.2;
-  const step = (W-pad*2)/(series.length-1);
-  const pts = series.map((v,i)=>[pad+i*step, H-pad-(v/max)*(H-pad*2)]);
-  const line = pts.map((p,i)=>(i?"L":"M")+p[0]+","+p[1]).join(" ");
-  const area = line + ` L${pts[pts.length-1][0]},${H} L${pts[0][0]},${H} Z`;
-  const last = pts[pts.length-1];
-  svg.innerHTML = `
-    <defs><linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#F05D2A" stop-opacity=".30"/>
-      <stop offset="1" stop-color="#F05D2A" stop-opacity="0"/>
-    </linearGradient></defs>
-    <path d="${area}" fill="url(#pg)"/>
-    <path d="${line}" fill="none" stroke="#F05D2A" stroke-width="3.5" stroke-linejoin="round"/>
-    <circle cx="${last[0]}" cy="${last[1]}" r="7" fill="#F05D2A">
-      <animate attributeName="r" values="6;9;6" dur="1.6s" repeatCount="indefinite"/>
-    </circle>`;
+/* المدن (بيانات حقيقية من Meltwater) */
+function renderCities(list){
+  const wrap = document.getElementById("citiesList");
+  if(!wrap) return;
+  wrap.innerHTML = "";
+  if(!list.length){
+    wrap.innerHTML = '<div style="color:var(--muted);font-size:13px;padding:8px 0">— لا توجد بيانات مدن —</div>';
+    return;
+  }
+  const max = Math.max(...list.map(c => c.count || 1));
+  const colors = ["var(--pulse)","var(--accent)","var(--pulse)","var(--accent)","var(--muted)"];
+  list.slice(0, 5).forEach((c, i) => {
+    const row = document.createElement("div");
+    row.className = "city-row";
+    row.style.animationDelay = (i * 80) + "ms";
+    row.innerHTML = `
+      <div class="city-name" title="${c.name}">${c.name}</div>
+      <div class="city-bar"><i style="background:${colors[i % colors.length]}"></i></div>
+      <div class="city-count">${c.count}</div>
+    `;
+    wrap.appendChild(row);
+    requestAnimationFrame(() => {
+      row.querySelector("i").style.width = ((c.count / max) * 100) + "%";
+    });
+  });
 }
-drawPulse(DATA.pulseSeries);
 
-/* محاكاة "حياة" الشاشة: تحديث خفيف كل ٨ ثواني */
-setInterval(()=>{
-  const s = DATA.pulseSeries;
-  s.push(Math.max(15, Math.min(90, s[s.length-1] + Math.round((Math.random()-.45)*14))));
-  s.shift();
-  drawPulse(s);
-  document.getElementById("pulseNow").innerHTML =
-    s[s.length-1] + ' <small>إشارة / الساعة الحالية</small>';
-  const m = document.getElementById("kMentions");
-  m.textContent = (parseInt(m.textContent.replace(/,/g,"")) + Math.floor(Math.random()*3))
-                  .toLocaleString("en-US");
-}, 8000);
+/* رسم التفاعل اليومي — بيانات حقيقية من Meltwater */
+function drawEngagementTrend(series){
+  const svg = document.getElementById("engSvg");
+  if(!svg || !series || !series.length) return;
+  const W = 600, H = 100, pad = 6;
+  const values = series.map(d => d.value || 0);
+  const max = Math.max(...values, 1) * 1.15;
+  const step = (W - pad * 2) / Math.max(series.length - 1, 1);
+  const pts = values.map((v, i) => [pad + i * step, H - pad - (v / max) * (H - pad * 2)]);
+  const line = pts.map((p, i) => (i ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1)).join(" ");
+  const area = line + ` L${pts[pts.length-1][0].toFixed(1)},${H} L${pts[0][0].toFixed(1)},${H} Z`;
+  svg.innerHTML = `
+    <defs><linearGradient id="engFill" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4AC0AE" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#4AC0AE" stop-opacity="0"/>
+    </linearGradient></defs>
+    <path d="${area}" fill="url(#engFill)"/>
+    <path d="${line}" fill="none" stroke="#4AC0AE" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+  `;
+}
 
 /* صفوف المنصات */
 (function(){
